@@ -3,7 +3,7 @@ var uuid = require('uuid');
 AWS.config.update({region: 'us-east-2'});
 
 
-exports.handler = (event, context, callback) => {
+module.exports.getChildTeams = (event, context, callback) => {
     // TODO implement
     var dynamodb = new AWS.DynamoDB();
     
