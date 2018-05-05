@@ -14,7 +14,7 @@ module.exports.handler = (event, context, callback) => {
             }
         },
         KeyConditionExpression: "ParentID = :v1",
-        TableName: "Teams"
+        TableName: "TeamsTbl"
     };
     dynamodb.query(params, function(err, data) {
         var response = {
@@ -26,6 +26,6 @@ module.exports.handler = (event, context, callback) => {
             "isBase64Encoded": false
         };
         if (err) console.log(err, err.stack); // an error occurred
-        else callback(null, data); // successful response
+        else callback(null, response); // successful response
     });
 };

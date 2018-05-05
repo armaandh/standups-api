@@ -8,7 +8,7 @@ module.exports.handler = (event, context, callback) => {
     var dynamodb = new AWS.DynamoDB();
 
     var params = {
-        TableName: 'TeamMembers',
+        TableName: 'TeamMembersTbl',
         Item: {
             'TeamID': { S: JSON.parse(event.body).teamid },
             'ID': { S: `${uuid.v1()}` },
@@ -30,7 +30,7 @@ module.exports.handler = (event, context, callback) => {
         if (err) {
             callback(null, err);
         } else {
-            callback(null, data);
+            callback(null, response);
         }
     });
 };
