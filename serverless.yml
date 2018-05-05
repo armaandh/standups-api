@@ -9,10 +9,9 @@ service: serverless-auths
 provider:
   name: aws
   runtime: nodejs6.10
+  region: us-east-1
   iamRoleStatements:
     $ref: ./iamRoleStatements.json
-  environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
 
 # Lambda Functions Below Defined for Standup API
 functions:
@@ -20,8 +19,8 @@ functions:
     handler: functions/liam-calls/getTeamMembers.handler
     events:
       - http:
-          path: members
-          method: get
+          path: teammembers
+          method: post
           cors: true
           #authorizer: aws_iam # Members are protected
   #getMember:
@@ -41,8 +40,8 @@ functions:
    handler: functions/liam-calls/getChildTeams.handler
    events:
      - http:
-         path: teams
-         method: get
+         path: childteams
+         method: post
          cors: true
   #        authorizer: aws_iam # 
   createTeam:
@@ -63,7 +62,7 @@ functions:
 
 resources:
   Resources:
-    StandupsDynamoDbTableTeams:
+    TeamsTbl:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         AttributeDefinitions:
@@ -84,7 +83,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: 'TeamsTbl'
-    StandupsDynamoDbTableTeamMembers:
+    TeamMembersTbl:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         AttributeDefinitions:
