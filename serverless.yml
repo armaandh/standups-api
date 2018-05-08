@@ -15,50 +15,31 @@ provider:
 
 # Lambda Functions Below Defined for Standup API
 functions:
-  getTeamMembers:
-    handler: functions/getTeamMembers.handler
-    events:
-      - http:
-          path: teammembers
-          method: post
-          cors: true
-          #authorizer: aws_iam # Members are protected
-  #getMember:
-    #handler: functions/getMember.handler
-    #events:
-    #  - http:
-     #     path: members/{id}
-      #    method: get
-          # request:
-          #   parameters:
-          #     paths:
-          #       id: true
-       #   cors: true
-        #  authorizer: aws_iam # Members are protected
-
-  getTeams:
-   handler: functions/getChildTeams.handler
-   events:
-     - http:
-         path: childteams
-         method: post
-         cors: true
-  #        authorizer: aws_iam # 
   createTeam:
     handler: functions/createTeam.handler
     events:
       - http:
-          path: teams
+          path: createteam
+          method: post
+          cors: true
+          #authorizer: aws_iam # Members are protected
+
+  addChildTeam:
+   handler: functions/addChildTeam.handler
+   events:
+     - http:
+         path: addchildteam
+         method: post
+         cors: true
+  #        authorizer: aws_iam # 
+  teamInfo:
+    handler: functions/teamInfo.handler
+    events:
+      - http:
+          path: teaminfo
           method: post
           cors: true
           #authorizer: aws_iam # TODO: fixed cors
-  createTeamMember:
-    handler: functions/createTeamMember.handler
-    events:
-      - http:
-          path: members
-          method: post
-          cors: true
 
 resources:
   Resources:
