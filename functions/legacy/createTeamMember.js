@@ -22,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
         var response = {
             "statusCode": 200,
             "headers": {
-                "my_header": "my_value"
+                "Access-Control-Allow-Origin": '*'
             },
             "body": JSON.stringify(data),
             "isBase64Encoded": false

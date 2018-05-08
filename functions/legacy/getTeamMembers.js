@@ -13,14 +13,14 @@ module.exports.handler = (event, context, callback) => {
                 S: JSON.parse(event.body).teamid
             }
         },
-        KeyConditionExpression: "ParentID = :v1",
-        TableName: "TeamsTbl"
+        KeyConditionExpression: "TeamID  = :v1",
+        TableName: "TeamMembersTbl"
     };
     dynamodb.query(params, function(err, data) {
         var response = {
             "statusCode": 200,
             "headers": {
-                "my_header": "my_value"
+                "Access-Control-Allow-Origin": '*'
             },
             "body": JSON.stringify(data),
             "isBase64Encoded": false
