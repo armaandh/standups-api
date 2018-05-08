@@ -30,13 +30,33 @@ module.exports.handler = (event, context, callback) => {
     dynamodb.putItem(params, function(err, data) {
         //Callback
         if (err) {
+            //Respond with database error.
             response.statusCode = 500;
-            response.body = JSON.stringify(err);
+            response.body = JSON.stringify({"error":err});
             callback(null, response);
         } else {
-            response.statusCode = 200;
-            response.body = JSON.stringify({"teamid":teamID});
-            callback(null, response);
+            //Create params
+            var params = {
+                TableName: 'TeamParentList',
+                Item: {
+                    'ParentID': { S: 'ROOT' },
+                    'ID': { S: uuid.v1() },
+                    'TeamID' : { S: teamID },
+                    'Name':{ S: teamName }
+                }
+            };
+            //Insert team into TeamParentList under team ROOT
+            //for easily getting a list of all teams.
+            dynamodb.putItem(params, function(err,data) {
+                if (err) {
+                    response.statusCode = 500;
+                    response.body = JSON.stringify({"error":err});
+                }else {
+                    response.statusCode = 200;
+                    response.body = JSON.stringify({"teamid":teamID});
+                    callback(null, response);        
+                }
+            });
         }
     });
 };

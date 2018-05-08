@@ -10,12 +10,15 @@ module.exports.handler = (event, context, callback) => {
     
     var parentID = JSON.parse(event.body).parentid;
     var teamID = JSON.parse(event.body).teamid;
+    var teamName = JSON.parse(event.body).teamname;
 
     var params = {
         TableName: 'TeamParentList',
         Item: {
             'ParentID': { S: parentID },
-            'ID': { S: teamID }
+            'ID': { S: uuid.v1() },
+            'TeamID' : { S: teamID },
+            'Name':{ S: teamName }
         }
     };
 
@@ -34,7 +37,7 @@ module.exports.handler = (event, context, callback) => {
         if (err) {
             response.statusCode = 500;
             response.success = false;
-            response.body = err;
+            response.body = JSON.stringify({"error":err});
             callback(null, response);
         } else {
             response.statusCode = 200;
