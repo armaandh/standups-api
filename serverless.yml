@@ -1,5 +1,5 @@
 # The `service` block is the name of the service
-service: serverless-auths
+service: serverless-dev
 
 # Configuration variables
 #custom:
@@ -16,7 +16,7 @@ provider:
 # Lambda Functions Below Defined for Standup API
 functions:
   getTeamMembers:
-    handler: functions/liam-calls/getTeamMembers.handler
+    handler: functions/getTeamMembers.handler
     events:
       - http:
           path: teammembers
@@ -37,7 +37,7 @@ functions:
         #  authorizer: aws_iam # Members are protected
 
   getTeams:
-   handler: functions/liam-calls/getChildTeams.handler
+   handler: functions/getChildTeams.handler
    events:
      - http:
          path: childteams
@@ -45,7 +45,7 @@ functions:
          cors: true
   #        authorizer: aws_iam # 
   createTeam:
-    handler: functions/liam-calls/createTeam.handler
+    handler: functions/createTeam.handler
     events:
       - http:
           path: teams
@@ -53,7 +53,7 @@ functions:
           cors: true
           #authorizer: aws_iam # TODO: fixed cors
   createTeamMember:
-    handler: functions/liam-calls/createTeamMember.handler
+    handler: functions/createTeamMember.handler
     events:
       - http:
           path: members
@@ -62,29 +62,26 @@ functions:
 
 resources:
   Resources:
-    TeamsTbl:
+    TeamList:
       Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
-          -
-            AttributeName: ParentID
-            AttributeType: S
           -
             AttributeName: ID
             AttributeType: S
         KeySchema:
           -
-            AttributeName: ParentID
-            KeyType: HASH
-          -
             AttributeName: ID
-            KeyType: RANGE
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: 'TeamsTbl'
-    TeamMembersTbl:
+        TableName: 'TeamList'
+        
+    TeamMembersList:
       Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
       Properties:
         AttributeDefinitions:
           -
@@ -103,4 +100,27 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: 'TeamMembersTbl'
+        TableName: 'TeamMembersList'
+
+    TeamParentList:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: ParentID
+            AttributeType: S
+          -
+            AttributeName: ID
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: ParentID
+            KeyType: HASH
+          -
+            AttributeName: ID
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'TeamParentList'
