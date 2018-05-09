@@ -8,12 +8,12 @@ var util = require('util');
 
 
 module.exports.handler = (event, context, callback) => {
-    // TODO implement
+    //Create db object
     var dynamodb = new AWS.DynamoDB();
 
     //Get data from post
     var teamID = JSON.parse(event.body).teamid;
-
+    //Create base response headers
     var response = {
         "headers": {
             "Access-Control-Allow-Origin": '*'
@@ -21,7 +21,7 @@ module.exports.handler = (event, context, callback) => {
         "isBase64Encoded": false
     };
 
-//Create query params
+    //Create query params for teamlist
     var params = {
         ExpressionAttributeValues: {
             ":v1": {
@@ -39,16 +39,22 @@ module.exports.handler = (event, context, callback) => {
             callback(null, response);
         }
         else {
+            //set status code to 200
             response.statusCode = 200;
+            //Test if team is ROOT
             try {
                 var bodyData = {
                     "id" : data.Items[0].ID.S,
                     "name":data.Items[0].Name.S
                 };
             } catch (error) {
-                var bodyData = {};
+                var bodyData = {
+                    "id"        : "ROOT",
+                    "name"      : "ROOT",
+                    "members"   : []
+                };
             }
-
+            //Create query for getting sub teams of team
             var params = {
                 ExpressionAttributeValues: {
                     ":v1": {
@@ -58,6 +64,7 @@ module.exports.handler = (event, context, callback) => {
                 KeyConditionExpression: "ParentID  = :v1",
                 TableName: "TeamParentList"
             };
+            //Query for sub teams
             dynamodb.query(params, function(err,data) {
                 if (err) {
                     response.statusCode = 500;
@@ -68,7 +75,6 @@ module.exports.handler = (event, context, callback) => {
                     var promises = [];
                     var dbp;
                     data.Items.forEach(function(element) {
-                        console.log("element"+element.TeamID.S)
                         dbp = dynamodb.query(params = {
                             ExpressionAttributeValues: {
                                 ":v1": {
@@ -80,27 +86,30 @@ module.exports.handler = (event, context, callback) => {
                         }).promise()
 
                         promises.push(dbp.then(function(teamData) {
-                            console.log("Promise callback"+JSON.stringify(teamData))
+                            console.log(teamData)
+                            var subTeam = {
+                                "teamid": teamData.Items[0].ID.S,
+                                "name"  : teamData.Items[0].Name.S
+                            }
+                            subTeamsArray.push(subTeam)
                         }))
                     });
 
-                    Promise.all(promises).then(() => console.log("CONSOLELOG CALLBACK"))
+                    var cbFunc = function() {
+                        response.subteams = subTeamsArray
+                        console.log(response)
+                        callback(null,response)
+                    }
+
+                    Promise.all(promises).then(function() {
+                        console.log("callback")
+                        bodyData.subteams = subTeamsArray
+                        response.body = JSON.stringify(bodyData)
+                        callback(null, response)
+                    })
+                    //callback(null, response)
                 }
             });
         }
     });
 };
-
-/*                        var params = {
-                            ExpressionAttributeValues: {
-                                ":v1": {
-                                    S: element.TeamID.S
-                                }
-                            },
-                            KeyConditionExpression: "ID  = :v1",
-                            TableName: "TeamList"
-                        };
-                        dynamodb.query(params).promise().then(function(err,teamData) {
-                            subTeamsArray.push(teamData)
-                            console.log(subTeamsArray)
-                        });*/ 
