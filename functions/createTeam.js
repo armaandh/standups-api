@@ -41,8 +41,7 @@ module.exports.handler = (event, context, callback) => {
                 Item: {
                     'ParentID': { S: 'ROOT' },
                     'ID': { S: uuid.v1() },
-                    'TeamID' : { S: teamID },
-                    'Name':{ S: teamName }
+                    'TeamID' : { S: teamID }
                 }
             };
             //Insert team into TeamParentList under team ROOT

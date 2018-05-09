@@ -1,6 +1,11 @@
 var AWS = require('aws-sdk');
 var uuid = require('uuid');
+//var getTeamName = require('./getTeamName');
 AWS.config.update({ region: 'us-east-1' });
+AWS.config.setPromisesDependency(null);
+
+var util = require('util');
+
 
 module.exports.handler = (event, context, callback) => {
     // TODO implement
@@ -60,20 +65,42 @@ module.exports.handler = (event, context, callback) => {
                     callback(null, response);
                 }else {
                     var subTeamsArray = [];
+                    var promises = [];
+                    var dbp;
                     data.Items.forEach(function(element) {
-                        var teamItem = {
-                            "teamid" : element.TeamID.S,
-                            "parentid" : element.ParentID.S,
-                            "name": element.Name.S
-                        }
-                        subTeamsArray.push(teamItem)
+                        console.log("element"+element.TeamID.S)
+                        dbp = dynamodb.query(params = {
+                            ExpressionAttributeValues: {
+                                ":v1": {
+                                    S: element.TeamID.S
+                                }
+                            },
+                            KeyConditionExpression: "ID  = :v1",
+                            TableName: "TeamList"
+                        }).promise()
+
+                        promises.push(dbp.then(function(teamData) {
+                            console.log("Promise callback"+JSON.stringify(teamData))
+                        }))
                     });
 
-                    bodyData.subteams = subTeamsArray
-                    response.body = JSON.stringify(bodyData);
-                    callback(null, response);
+                    Promise.all(promises).then(() => console.log("CONSOLELOG CALLBACK"))
                 }
             });
         }
     });
 };
+
+/*                        var params = {
+                            ExpressionAttributeValues: {
+                                ":v1": {
+                                    S: element.TeamID.S
+                                }
+                            },
+                            KeyConditionExpression: "ID  = :v1",
+                            TableName: "TeamList"
+                        };
+                        dynamodb.query(params).promise().then(function(err,teamData) {
+                            subTeamsArray.push(teamData)
+                            console.log(subTeamsArray)
+                        });*/ 

@@ -10,15 +10,13 @@ module.exports.handler = (event, context, callback) => {
     
     var parentID = JSON.parse(event.body).parentid;
     var teamID = JSON.parse(event.body).teamid;
-    var teamName = JSON.parse(event.body).teamname;
 
     var params = {
         TableName: 'TeamParentList',
         Item: {
             'ParentID': { S: parentID },
             'ID': { S: uuid.v1() },
-            'TeamID' : { S: teamID },
-            'Name':{ S: teamName }
+            'TeamID' : { S: teamID }
         }
     };
 
