@@ -15,8 +15,7 @@ module.exports.handler = (event, context, callback) => {
         TableName: 'TeamParentList',
         Item: {
             'ParentID': { S: parentID },
-            'ID': { S: uuid.v1() },
-            'TeamID' : { S: teamID }
+            'ID': { S: teamID }
         }
     };
 
@@ -34,12 +33,13 @@ module.exports.handler = (event, context, callback) => {
         //Callback
         if (err) {
             response.statusCode = 500;
-            response.success = false;
-            response.body = JSON.stringify({"error":err});
+            //response.success = false;
+            response.body = JSON.stringify({"error":err,"status":false});
             callback(null, response);
         } else {
+            console.log("callback");
             response.statusCode = 200;
-            response.success = true;
+            response.body = JSON.stringify({"status":true})
             callback(null, response);
         }
     });

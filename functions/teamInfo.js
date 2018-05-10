@@ -78,7 +78,7 @@ module.exports.handler = (event, context, callback) => {
                         dbp = dynamodb.query(params = {
                             ExpressionAttributeValues: {
                                 ":v1": {
-                                    S: element.TeamID.S
+                                    S: element.ID.S
                                 }
                             },
                             KeyConditionExpression: "ID  = :v1",
@@ -102,10 +102,36 @@ module.exports.handler = (event, context, callback) => {
                     }
 
                     Promise.all(promises).then(function() {
-                        console.log("callback")
                         bodyData.subteams = subTeamsArray
-                        response.body = JSON.stringify(bodyData)
-                        callback(null, response)
+                        if (teamID == "ROOT") {
+                            response.body = JSON.stringify(bodyData)
+                            callback(null, response)
+                        }else {
+                            params = {
+                                ExpressionAttributeValues: {
+                                    ":v1": {
+                                        S: teamID
+                                    }
+                                },
+                                KeyConditionExpression: "TeamID = :v1",
+                                TableName: "TeamMembersList"
+                            }
+                            dynamodb.query(params, function(err, memberData) {
+                                memberDataArray = [];
+                                memberData.Items.forEach(function(element) {
+                                    var memberDataItem = {
+                                        "id"        : element.ID.S,
+                                        "userpoolid": element.UserPoolID.S,
+                                        "name"      : element.Name.S
+                                    }
+                                    memberDataArray.push(memberDataItem);
+                                })
+
+                                bodyData.members = memberDataArray
+                                response.body = JSON.stringify(bodyData)
+                                callback(null, response)
+                            })
+                        }
                     })
                     //callback(null, response)
                 }

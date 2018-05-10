@@ -40,6 +40,13 @@ functions:
           method: post
           cors: true
           #authorizer: aws_iam # TODO: fixed cors
+  createTeamMember:
+    handler: functions/createTeamMember.handler
+    events:
+      - http:
+          path: createteammember
+          method: post
+          cors: true
 
 resources:
   Resources:
