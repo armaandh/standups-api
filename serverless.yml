@@ -188,7 +188,7 @@ resources:
           - ClientId:
               Ref: CognitoUserPoolClient
             ProviderName:
-              Fn::GetAtt: [ "CognitoUserPool", "ProviderName" ]
+              Fn::GetAtt: [ CognitoUserPool, ProviderName ]
 
     # IAM roles
     CognitoIdentityPoolRoles:
@@ -218,21 +218,25 @@ resources:
                     Ref: CognitoIdentityPool
                 'ForAnyValue:StringLike':
                   'cognito-identity.amazonaws.com:amr': authenticated
-      Policies:
-        - PolicyName: 'CognitoAuthorizedPolicy'
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: 'Allow'
-                Action:
-                  - 'elastictranscoder:Read*'
-                  - 'elastictranscoder:List*'
-                  - 'elastictranscoder:*Job'
-                  - 'elastictranscoder:*Preset'
-                  - 's3:List*'
-                  - 'sns:List*'
-                Resource: '*'
-  
+        Policies:
+          - PolicyName: 'CognitoAuthorizedPolicy'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: 'Allow'
+                  Action:
+                    - 'elastictranscoder:Read*'
+                    - 'elastictranscoder:List*'
+                    - 'elastictranscoder:*Job'
+                    - 'elastictranscoder:*Preset'
+                    - 's3:List*'
+                    - 'sns:List*'
+                  Resource: '*'
+                #- Effect: 'Allow'
+                #  Action:
+                #    - 's3:*'
+                #  Resource:
+  #
 
 # Print out the name of the bucket that is created
 Outputs:
@@ -247,3 +251,7 @@ Outputs:
   UserPoolClientId:
     Value:
       Ref: CognitoUserPoolClient
+
+  IdentityPoolId:
+    Value:
+      Ref: CognitoIdentityPool

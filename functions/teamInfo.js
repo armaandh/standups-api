@@ -95,11 +95,6 @@ module.exports.handler = (event, context, callback) => {
                         }))
                     });
 
-                    var cbFunc = function() {
-                        response.subteams = subTeamsArray
-                        console.log(response)
-                        callback(null,response)
-                    }
 
                     Promise.all(promises).then(function() {
                         bodyData.subteams = subTeamsArray
