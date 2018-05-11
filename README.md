@@ -17,7 +17,7 @@
 ## Setting up infrastructure resources in AWS
 
 1. Create amazonConfig.json file | We'll need it for our Client application
-`
+```javascript
 export const API_GATEWAY_NAME = 
 export const INPUT_STORAGE = {
     bucket: , 
@@ -49,7 +49,7 @@ export const configuration = {
         ]
     }
 }
-`
+```
 2. Create UserPool
     1. Save `Pool Id` as `identityPoolId` in `amazonConfig.json`
     1. Set attribute to `Email address or phone number`
@@ -62,7 +62,7 @@ export const configuration = {
     1. Create both buckets and save their names under `INPUT_STORAGE`, `OUTPUT_STORAGE` and `YOUR_THUMBNAILS_BUCKET` with the region accordingly
     2. Set CORS configuration to all buckets
 
-`
+```XML
 <?xml version="1.0" encoding="UTF-8"?>
 <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
 <CORSRule>
@@ -79,7 +79,7 @@ export const configuration = {
     <AllowedHeader>*</AllowedHeader>
 </CORSRule>
 </CORSConfiguration>
-`
+```
 5. Setting up Elastic Transcoder
     1. Create `Transcoding Pipeline`
         1. Specify input, output and thumbnails buckets
@@ -88,7 +88,7 @@ export const configuration = {
 
 6. Set up IAM policies
     1. Create `UserBucketPolicy` and replace `YOUR_INPUT_BUCKET` & `YOUR_OUTPUT_BUCKET` with the appropriate values 
-    `
+    ```javascript
     {
         "Version": "2012-10-17",
         "Statement": [
@@ -125,7 +125,7 @@ export const configuration = {
             }
         ]
     }
-    `
+    ```
 
 6. Set up lambda for video transcoding
     1. Go to Lambda configuration panel
