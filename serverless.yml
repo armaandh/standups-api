@@ -238,20 +238,20 @@ resources:
                 #  Resource:
   #
 
-# Print out the name of the bucket that is created
-Outputs:
-  AttachmentsBucketName:
-    Value:
-      Ref: AttachmentsBucket
+  # Print out the name of the bucket that is created
+  Outputs:
+    AttachmentsBucketName:
+      Value:
+        Ref: AttachmentsBucket
 
-  UserPoolId:
-    Value:
-      Ref: CognitoUserPool
+    UserPoolId:
+      Value:
+        Ref: CognitoUserPool
 
-  UserPoolClientId:
-    Value:
-      Ref: CognitoUserPoolClient
+    UserPoolClientId:
+      Value:
+        Ref: CognitoUserPoolClient
 
-  IdentityPoolId:
-    Value:
-      Ref: CognitoIdentityPool
+    IdentityPoolId:
+      Value:
+        Ref: CognitoIdentityPool
