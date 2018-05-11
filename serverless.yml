@@ -140,43 +140,43 @@ resources:
           WriteCapacityUnits: 1
         TableName: 'UrlList'
 
-    InputBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        # Set the CORS policy
-        CorsConfiguration:
-          CorsRules:
-            -
-              AllowedOrigins:
-                - '*'
-              AllowedHeaders:
-                - '*'
-              AllowedMethods:
-                - GET
-                - PUT
-                - POST
-                - DELETE
-                - HEAD
-              MaxAge: 3000
-
-    OutputBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        # Set the CORS policy
-        CorsConfiguration:
-          CorsRules:
-            -
-              AllowedOrigins:
-                - '*'
-              AllowedHeaders:
-                - '*'
-              AllowedMethods:
-                - GET
-                - PUT
-                - POST
-                - DELETE
-                - HEAD
-              MaxAge: 3000
+#   InputBucket:
+#     Type: AWS::S3::Bucket
+#     Properties:
+#       # Set the CORS policy
+#       CorsConfiguration:
+#         CorsRules:
+#           -
+#             AllowedOrigins:
+#               - '*'
+#             AllowedHeaders:
+#               - '*'
+#             AllowedMethods:
+#               - GET
+#               - PUT
+#               - POST
+#               - DELETE
+#               - HEAD
+#             MaxAge: 3000
+#
+#   OutputBucket:
+#     Type: AWS::S3::Bucket
+#     Properties:
+#       # Set the CORS policy
+#       CorsConfiguration:
+#         CorsRules:
+#           -
+#             AllowedOrigins:
+#               - '*'
+#             AllowedHeaders:
+#               - '*'
+#             AllowedMethods:
+#               - GET
+#               - PUT
+#               - POST
+#               - DELETE
+#               - HEAD
+#             MaxAge: 3000
 
 #   CognitoUserPool:
 #     Type: AWS::Cognito::UserPool
