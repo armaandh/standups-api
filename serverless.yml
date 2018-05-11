@@ -40,6 +40,7 @@ functions:
           method: post
           cors: true
           #authorizer: aws_iam # TODO: fixed cors
+  #
   createTeamMember:
     handler: functions/createTeamMember.handler
     events:
@@ -47,6 +48,9 @@ functions:
           path: createteammember
           method: post
           cors: true
+  #
+  transcodeVideo:
+    handler: functions/transcodeVideos.handler
 
 resources:
   Resources:
@@ -211,71 +215,75 @@ resources:
 #             Fn::GetAtt: [ CognitoUserPool, ProviderName ]
 
     # IAM roles
-    CognitoIdentityPoolRoles:
-      Type: AWS::Cognito::IdentityPoolRoleAttachment
-      Properties:
-        IdentityPoolId:
-          Ref: CognitoIdentityPool
-        Roles:
-          authenticated:
-            Fn::GetAtt: [CognitoAuthRole, Arn]
-
-    CognitoAuthRole:
-      Type: AWS::IAM::Role
-      Properties:
-        Path: /
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: 'Allow'
-              Principal:
-                Federated: 'cognito-identity.amazonaws.com'
-              Action:
-                - 'sts:AssumeRoleWithWebIdentity'
-              Condition:
-                StringEquals:
-                  'cognito-identity.amazinaws.com:aud':
-                    Ref: CognitoIdentityPool
-                'ForAnyValue:StringLike':
-                  'cognito-identity.amazonaws.com:amr': authenticated
-        Policies:
-          - PolicyName: 'CognitoAuthorizedPolicy'
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: 'Allow'
-                  Action:
-                    - 'elastictranscoder:Read*'
-                    - 'elastictranscoder:List*'
-                    - 'elastictranscoder:*Job'
-                    - 'elastictranscoder:*Preset'
-                    - 's3:List*'
-                    - 'sns:List*'
-                  Resource: '*'
-                #- Effect: 'Allow'
-                #  Action:
-                #    - 's3:*'
-                #  Resource:
+#    CognitoIdentityPoolRoles:
+#      Type: AWS::Cognito::IdentityPoolRoleAttachment
+#      Properties:
+#        IdentityPoolId:
+#          Ref: CognitoIdentityPool
+#        Roles:
+#          authenticated:
+#            Fn::GetAtt: [CognitoAuthRole, Arn]
+#
+#    CognitoAuthRole:
+#      Type: AWS::IAM::Role
+#      Properties:
+#        Path: /
+#        AssumeRolePolicyDocument:
+#          Version: '2012-10-17'
+#          Statement:
+#            - Effect: 'Allow'
+#              Principal:
+#                Federated: 'cognito-identity.amazonaws.com'
+#              Action:
+#                - 'sts:AssumeRoleWithWebIdentity'
+#              Condition:
+#                StringEquals:
+#                  'cognito-identity.amazinaws.com:aud':
+#                    Ref: CognitoIdentityPool
+#                'ForAnyValue:StringLike':
+#                  'cognito-identity.amazonaws.com:amr': authenticated
+#        Policies:
+#          - PolicyName: 'CognitoAuthorizedPolicy'
+#            PolicyDocument:
+#              Version: '2012-10-17'
+#              Statement:
+#                - Effect: 'Allow'
+#                  Action:
+#                    - 'elastictranscoder:Read*'
+#                    - 'elastictranscoder:List*'
+#                    - 'elastictranscoder:*Job'
+#                    - 'elastictranscoder:*Preset'
+#                    - 's3:List*'
+#                    - 'sns:List*'
+#                  Resource: '*'
+#                #- Effect: 'Allow'
+#                #  Action:
+#                #    - 's3:*'
+#                #  Resource:
   #
 
   # Print out the name of the bucket that is created
   Outputs:
-    AttachmentsBucketName:
-      Value:
-        Ref: AttachmentsBucket
+#    UserPoolId:
+#      Value:
+#        Ref: CognitoUserPool
+#
+#    UserPoolClientId:
+#      Value:
+#        Ref: CognitoUserPoolClient
 
-    UserPoolId:
-      Value:
-        Ref: CognitoUserPool
-
-    UserPoolClientId:
-      Value:
-        Ref: CognitoUserPoolClient
-
-    IdentityPoolId:
-      Value:
-        Ref: CognitoIdentityPool
+    #IdentityPoolId:
+    #  Value:
+    #    Ref: CognitoIdentityPool
     
-    CognitoAuthRole:
+#    CognitoAuthRole:
+#      Value:
+#        Ref: CognitoAuthRole
+#
+    OutputBucket:
       Value:
-        Red: CognitoAuthRole
+        Ref: OutputBucket
+
+    InputBucket:
+      Value:
+        Ref: InputBucket
