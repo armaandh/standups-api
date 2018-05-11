@@ -105,9 +105,9 @@ export const configuration = {
             }
         ]
     }
-    `
+    ```
     2. Create `ElasticTranscoderPolicy`
-    `
+    ```javascript
     {
         "Version": "2012-10-17",
         "Statement": [
