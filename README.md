@@ -1,11 +1,11 @@
-# BCIT SSD Industry Project (Standups)
+<h1 align="center">
+  <img src="logo.png" alt="Logo" />
+</h1>
+<h2 align="center">
+  <h3>Video-Based Tool to facilitate Morning Scrum Standups</h3>
+</h2>
 
-## Team Members
-
-* Dhanji	Armaan
-* MacNeil	Liam
-* Tumtaweetikul	Cha
-* Edgar Zapeka
+**Standups** is a project developed to help facilitate remote scrum meetings (Standups) in the workplace. The project is open-source and contributions are greatly appreciated.  
 
 ## Technologies
 
