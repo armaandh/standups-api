@@ -143,4 +143,4 @@ export const configuration = {
     1. under root folder run `serverless deploy`
     2. Save endpoint into `amazonConfig.json` file under `endpoint`
 
-8. Setup is done. Get some beer :satisfied:
+8. Setup is complete!
