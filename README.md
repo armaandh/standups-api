@@ -127,20 +127,20 @@ export const configuration = {
     }
     ```
 
-6. Set up lambda for video transcoding
+7. Setup labdas and get `endpoint` URL
+    1. under root folder run `serverless deploy -v`
+    2. Save endpoint into `amazonConfig.json` file under `endpoint`
+
+8. Set up lambda for video transcoding
     1. Go to Lambda configuration panel
     2. In the panel `Add triggers` select `S3` and configure it to you input bucket
     3. Under `Environment variables` create `PIPELINE_ID` and set it to pipeline id
     4. Under `Execution role` select lambda transcoded role
 
 
-6. Set up IAM roles
+9. Set up IAM roles
     1. Select Cognito role for Authenticated User and add `UserBucketPolicy` with `ElasticTranscoderPolicy`
     2. Select Elastic Transcoder Default Role and add `ElasticTranscoderPolicy`
     3. Select role for lambda and add `UserBucketPolicy` with `ElasticTranscoderPolicy`
 
-7. Setup labdas and get `endpoint` URL
-    1. under root folder run `serverless deploy`
-    2. Save endpoint into `amazonConfig.json` file under `endpoint`
-
-8. Setup is complete!
+10. Setup is complete!
