@@ -18,33 +18,33 @@
 
 1. Create amazonConfig.json file | We'll need it for our Client application
 `
-export const API_GATEWAY_NAME = 'dev-serverless-auths1'
+export const API_GATEWAY_NAME = 
 export const INPUT_STORAGE = {
-    bucket: '', 
-    region: '',
+    bucket: , 
+    region: ,
 }
 export const OUTPUT_STORAGE = {
-    bucket: '', 
-    region: '',
+    bucket: , 
+    region: ,
 }
 
 export const YOUR_THUMBNAILS_BUCKET = {
-    bucket: '', 
-    region: '',
+    bucket: , 
+    region: ,
 }
 
 export const configuration = {
     Auth: {
-        identityPoolId: '',
-        region: '', 
-        userPoolId: '', 
-        userPoolWebClientId: '',
+        identityPoolId: ,
+        region: , 
+        userPoolId: , 
+        userPoolWebClientId: ,
     },
     API: {
         endpoints: [
             {
                 name: API_GATEWAY_NAME,
-                endpoint: ''
+                endpoint: 
             }
         ]
     }
