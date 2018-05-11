@@ -47,6 +47,7 @@ functions:
           path: createteammember
           method: post
           cors: true
+
 resources:
   Resources:
     TeamList:
@@ -135,7 +136,7 @@ resources:
           WriteCapacityUnits: 1
         TableName: 'UrlList'
 
-    AttachmentsBucket:
+    InputBucket:
       Type: AWS::S3::Bucket
       Properties:
         # Set the CORS policy
@@ -154,41 +155,60 @@ resources:
                 - HEAD
               MaxAge: 3000
 
-    CognitoUserPool:
-      Type: AWS::Cognito::UserPool
+    OutputBucket:
+      Type: AWS::S3::Bucket
       Properties:
-        # Generate a name based on the stage
-        UserPoolName: standup-user-pool
-        # Set email as an alias
-        AliasAttributes:
-          - email
-        AutoVerifiedAttributes:
-          - email
+        # Set the CORS policy
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
 
-    CognitoUserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties:
-        # Generate an app client name based on the stage
-        ClientName: standup-user-pool-client
-        UserPoolId:
-          Ref: CognitoUserPool
-        ExplicitAuthFlows:
-          - ADMIN_NO_SRP_AUTH
-        GenerateSecret: false
-
-    CognitoIdentityPool:
-      Type: AWS::Cognito::IdentityPool
-      Properties:
-        # Generate a name based on the stage
-        IdentityPoolName: standupIdentityPool
-        # Don't allow unathenticated users
-        AllowUnauthenticatedIdentities: false
-        # Link to our User Pool
-        CognitoIdentityProviders:
-          - ClientId:
-              Ref: CognitoUserPoolClient
-            ProviderName:
-              Fn::GetAtt: [ CognitoUserPool, ProviderName ]
+#   CognitoUserPool:
+#     Type: AWS::Cognito::UserPool
+#     Properties:
+#       # Generate a name based on the stage
+#       UserPoolName: standup-user-pool
+#       # Set email as an alias
+#       AliasAttributes:
+#         - email
+#       AutoVerifiedAttributes:
+#         - email
+#       Unable to get main verification to change to email instead of username
+#   CognitoUserPoolClient:
+#     Type: AWS::Cognito::UserPoolClient
+#     Properties:
+#       # Generate an app client name based on the stage
+#       ClientName: standup-user-pool-client
+#       UserPoolId:
+#         Ref: CognitoUserPool
+#       ExplicitAuthFlows:
+#         - ADMIN_NO_SRP_AUTH
+#       GenerateSecret: false
+#
+#   CognitoIdentityPool:
+#     Type: AWS::Cognito::IdentityPool
+#     Properties:
+#       # Generate a name based on the stage
+#       IdentityPoolName: standupIdentityPool
+#       # Don't allow unathenticated users
+#       AllowUnauthenticatedIdentities: false
+#       # Link to our User Pool
+#       CognitoIdentityProviders:
+#         - ClientId:
+#             Ref: CognitoUserPoolClient
+#           ProviderName:
+#             Fn::GetAtt: [ CognitoUserPool, ProviderName ]
 
     # IAM roles
     CognitoIdentityPoolRoles:
@@ -255,3 +275,7 @@ resources:
     IdentityPoolId:
       Value:
         Ref: CognitoIdentityPool
+    
+    CognitoAuthRole:
+      Value:
+        Red: CognitoAuthRole
